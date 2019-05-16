@@ -1,0 +1,41 @@
+#!/usr/bin/make -f
+
+# My attempt at a makefile that will work reasonably for my Learning OpenCV3 exercises and examples.
+# Goals are to be able to change it as little as possible for each project, have it create binaries
+# in one step, and to be able to have it automatically run Google Test unit tests for some exercises.
+# Since these are simple projects, am putting obj files in current dir and binaries in bin.
+# Modified for this chapter to put all logic in a separate library, then link a simple main to that.
+
+
+BINDIR = bin/
+SRCDIR = src/
+
+SRCS_MAIN = runVidCap.cpp
+SRCS_LIB = funcs.cpp
+MAINTARGETNAME = runVidCap
+LIBS1 = -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_imgcodecs -lopencv_videoio -lopencv_video -lopencv_bgsegm
+LIBS2 = -lgregOpenCvHelp
+
+G++ = g++
+OBJS_MAIN = $(SRCS_MAIN:.cpp=.o)
+OBJS_LIB = $(SRCS_LIB:.cpp=.o)
+LIBNAME = libgregOpenCvHelp.so
+FLAGS_LIB = -shared
+FLAG_MAIN = 
+CPPFLAGS = -fPIC
+
+all: 	$(OBJS_MAIN) $(OBJS_LIB)
+	mkdir -p $(BINDIR)
+
+	# Create the library.
+	$(G++) $(FLAGS_LIB) -o $(BINDIR)$(LIBNAME) $(OBJS_LIB) $(LIBS1)
+
+	# Create the target executable.
+	$(G++) $(FLAGS_MAIN) -o $(BINDIR)$(MAINTARGETNAME) $(OBJS_MAIN) $(LIBS2) $(LIBS1)
+
+
+
+.PHONY: clean
+clean:
+	rm -f *.o $(BINDIR)$(MAINTARGETNAME) $(BINDIR)$(LIBNAME)
+
