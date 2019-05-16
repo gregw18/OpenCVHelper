@@ -1,4 +1,4 @@
-# Background removal exercises for OpenCV
+# Helper Functions for OpenCV
 
 Some helper functions used across most of my OpenCV exercises, and a helper application for
 saving jpg's from a video file.
